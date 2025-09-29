@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16 # Use a recent stable PostgreSQL image
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: my_rails_app_development # Adjust database name
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Expose PostgreSQL port on your host
+
+  web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/my_rails_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:password@db:5432/my_rails_app_development
+
+volumes:
+  postgres_data:
