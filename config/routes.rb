@@ -12,4 +12,6 @@ Rails.application.routes.draw do
   resources :posts do
     post :rating, on: :member
   end
+
+  get "users", to: "users#index"
 end
